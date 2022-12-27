@@ -16,12 +16,12 @@ Also you will need Arduino IDE for editing and running Arduino code and any IDE 
 code is responsible for reading this signal and reconstructing the initial data. The Java code uses LibGDX framework, because it is easy to use with 
 different media(sounds, pictures, etc.) and is multiplatform - it can be run on desktop, android, MacOS, Web. 
 
+## Details
+
 The basics of data transferring via analogue signal (sound, radio, light, anything...) is modulating the shape of the wave so different shapes of different regions of
 the wave correspond to some data. There are many ways of wave modulation - [amplitude modulation](https://en.wikipedia.org/wiki/Amplitude_modulation), 
 [frequency modulation](https://en.wikipedia.org/wiki/Frequency_modulation), [phase modulation](https://en.wikipedia.org/wiki/Phase_modulation) and more. In this project
 the simplest one, amplitude modulation, was made.
-
-## Details
 
 Java code produces spikes of sound waves at 100 Hz, and modulates the amplitude (volume) of each spike so the amplitude corresponds to an integer number.
 Arduino code recieves the analog signals and demodulates it, retrieving the numbers. It was found that the maximum amount of distinct values that can be transferred via
