@@ -29,4 +29,8 @@ one spike in this setup is 7 (integer numbers 0-6). Further descritization is ha
 distinct adjacent values. A spike is being produced 20 times a second. More frequent spikes result in increasing the error in spikes's amplitude. Likely because of inertia 
 in anlog components of audio system. Also increasing the frequency of sound leads to increasing the error of spike's amplitude. Because the wavelength becomes smaller,
 Arduino reads fewer values of each spike, which leads to bigger error. Inside Java code you will find samples of sound spikes of different frequency if you want to experiment and come up with better algorithms, or you can just generate your own through additional software (I used Audacity) or at runtime using some framework.
-Because different devices have different audiosystems, the resulting physical amplitude of a wave for each number will be specific for your device. In order to successfully demodulate this signal you will have to adjust Arduino script, mainly the *intervals* array that contains values of amplitudes dividing ranges of amplitudes for each numeric value.  
+Because different devices have different audiosystems, the resulting physical amplitude of a wave for each number will be specific for your device. In order to successfully demodulate this signal you will have to adjust Arduino script, mainly the *intervals* array that contains values of amplitudes dividing ranges of amplitudes for each numeric value:
+```
+float intervals[] = {20,30,40,50,65,75,85,100};
+```
+This can be done by sending sequence 0-6 several times, printing the resulting amplitudes and picking up appropriate dividing amplitudes. 
