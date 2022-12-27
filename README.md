@@ -25,5 +25,5 @@ Java code produces spikes of sound waves at 100 Hz, and modulates the amplitude 
 Arduino code recieves the analog signals and demodulates it, retrieving the numbers. It was found that the maximum amount of distinct values that can be transferred via
 one spike in this setup is 7 (integer numbers 0-6). Further descritization is hard to perform because spike amplitude errors start to overlap which makes it impossible to
 distinct adjacent values. A spike is being produced 20 times a second. More frequent spikes result in increasing the error in spikes's amplitude. Likely because of inertia 
-in anlogue components of audio system. Also increasing the frequency of sound leads to increasing the error of spike's amplitude. Because the wavelength becomes smaller,
-Arduino reads fewer values of each spike, which leads to bigger error. 
+in anlog components of audio system. Also increasing the frequency of sound leads to increasing the error of spike's amplitude. Because the wavelength becomes smaller,
+Arduino reads fewer values of each spike, which leads to bigger error. Inside Java code you will find samples of sound spikes of different frequency if you want to experiment and come up with better algorithms, or you can just generate your own through additional software (I used Audacity) or at runtime using some framework. 
