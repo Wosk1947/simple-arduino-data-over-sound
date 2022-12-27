@@ -21,6 +21,8 @@ the wave correspond to some data. There are many ways of wave modulation - [ampl
 [frequency modulation](https://en.wikipedia.org/wiki/Frequency_modulation), [phase modulation](https://en.wikipedia.org/wiki/Phase_modulation) and more. In this project
 the simplest one, amplitude modulation, was made.
 
+## Details
+
 Java code produces spikes of sound waves at 100 Hz, and modulates the amplitude (volume) of each spike so the amplitude corresponds to an integer number.
 Arduino code recieves the analog signals and demodulates it, retrieving the numbers. It was found that the maximum amount of distinct values that can be transferred via
 one spike in this setup is 7 (integer numbers 0-6). Further descritization is hard to perform because spike amplitude errors start to overlap which makes it impossible to
