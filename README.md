@@ -1,6 +1,6 @@
 # Simple Arduino Data Over Sound
 ## Introduction
-  This project shows how one can perform data transfer from any device capable of producing sound and having a 3.5 mm mini jack for headphones to arduino. 
+  This project shows how one can perform data transfer from any device capable of producing sound and having a 3.5 mm mini jack for headphones to Arduino. 
 The data is being transferred via modulating the signal produced by device's audio system. The project is purely educational, its goal is to provide reader 
 with some basics of data over sound transferring that is commonly used since 60s in modems. The project can hardly be applied in practice, 
 because maximum speed of data transferring achieved is ~80 bits per second.
@@ -9,7 +9,7 @@ because maximum speed of data transferring achieved is ~80 bits per second.
 
 <img src="https://user-images.githubusercontent.com/66104180/209701223-4b9deaf5-bf26-456b-a9e2-286be31ba553.jpg" width="300" height="400" />
 
-For this project you will need Arduino and a cable with 3.5 mm mini jack connected to headphones port. You can use broken headphones for this purpose. 
+For this project you will need Arduino(I used Arduino Nano) and a cable with 3.5 mm mini jack connected to headphones port. You can use broken headphones for this purpose. 
 You should connect one of signal lines to some pin of Arduino (A1 is used in project). Note that if you play mono sound then it doesn't matter which 
 signal line to use (Left or Right). When reading data from pin Arduino connects this pin to ground, so you don't need to worry about ground lines of headphones.
 Also you will need Arduino IDE for editing and running Arduino code and any IDE for Java (I used Android Studio). The Java part is responsible for converting stream of data to sounds. Arduino
@@ -43,7 +43,7 @@ First you need to change the *amplitudeIntervals* array that contains values of 
 int amplitudeIntervals[] = {20,30,40,50,65,75,85,100};
 ```
 This can be done by sending sequence 0-6 several times, printing the resulting amplitudes and picking up appropriate dividing amplitudes. Note that printing to Serial
-is computational heavy procedure for Arduino, and if you try to output too much info, it will affect the speed of Arduino which will lead to errors in recognition of spikes.
+is computational heavy procedure for Arduino, and if you try to output too much info, it will decrease the speed of Arduino which will lead to fewere points of each spike registered and as a result to errors in recognition of spikes.
 Second, you need to change *wavelengthIntervals* array that contains ranges of width of spike (amount of points containing the spike):
 ```
 int wavelengthIntervals[] = {8,12,20};
