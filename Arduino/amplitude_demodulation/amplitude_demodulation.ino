@@ -1,8 +1,11 @@
-const int rawValuesArraySize = 16;
+const int rawValuesArraySize = 32;
 float lastRawValues[rawValuesArraySize];
-float intervals[] = {20,30,40,50,65,75,85,100};
-
+int amplitudeIntervals[] = {30,40,52,64,74,84,94,110};
+int wavelengthIntervals[] = {8,12,20};
 int rawValueThreshold = 10;
+
+float currentMaximum = 0.0f;
+int currentMaximumWidth = 0;
 
 void setup() {
     Serial.begin(9600);
@@ -56,6 +59,54 @@ float findMaximumOnInterval(float* array, int size, int start, int interval) {
     return maximum;
 }
 
+void findMaximumAndWidthOnInterval(float* array, int size) {
+    currentMaximum = -1;
+    currentMaximumWidth = 0;
+    int maxIndex = -1;
+    int ascending = 0;
+    int descending = 0;
+    int start = -1;
+    int width = 0;
+    float halfHeight = 0;
+    bool found = false;
+    for (int i = start; i < size; i++) {
+        if (array[i] == 0) {
+            continue;
+        } 
+        if (array[i] < array[i+1]) {
+            if (start == -1){
+                start = i;
+            }
+            ascending++;
+            width++;
+        }
+        if (array[i] > array[i+1]) {
+            if (ascending > 0){
+                if (maxIndex == -1){
+                    maxIndex = i;
+                }
+                descending++;
+                width++;
+            }
+        }
+        int pointsCountThreshold = 4; //Original = 2
+        float pointsBalanceThreshold = 0.6; // Original = 0.7
+        if (ascending > pointsCountThreshold && descending > pointsCountThreshold && descending > pointsBalanceThreshold * ascending){
+            found = true;
+            break;
+        }
+    }
+    if (found) {
+        currentMaximum = array[maxIndex];
+        currentMaximumWidth = width;
+        Serial.print(getNumber(amplitudeIntervals, 8, wavelengthIntervals, 3, currentMaximum, currentMaximumWidth));
+        Serial.print(F(" "));
+        for (int i = 0; i <= maxIndex; i++) {  
+            array[i] = 0;
+        }
+    }
+}
+
 void printArray(int* array, int size) {
     for (int i = 0; i < size; i++) {
         Serial.print(array[i]);
@@ -64,10 +115,14 @@ void printArray(int* array, int size) {
     Serial.println();
 }
 
-int getNumber(float* array, int size, float value) {
+int getNumber(int* ampIntervals, int size, int* waveIntervals, int size2, float amplitude, int wavelength) {
     for (int i = 0; i <= size - 2; i++) {
-       if (value >= array[i] && value < array[i+1]) {
-          return i;
+       if (amplitude >= ampIntervals[i] && amplitude < ampIntervals[i+1]) {
+          for (int j = 0; j < size2; j++){
+              if (wavelength >= waveIntervals[j] && wavelength < waveIntervals[j+1]) {
+                  return j * (size-1) + i;
+              }   
+          }
        }
     }
     return -1;
@@ -78,11 +133,7 @@ void loop() {
     if (rawValue > rawValueThreshold) {
         addValueToArray(lastRawValues, rawValuesArraySize, rawValue);
         applyLowPassFilter(lastRawValues, rawValuesArraySize);
-        float currentMaximumAlt = findMaximumOnInterval(lastRawValues, rawValuesArraySize, 0, rawValuesArraySize-2);
-        if (currentMaximumAlt != -1) {
-          Serial.print(getNumber(intervals, 9, currentMaximumAlt));
-          Serial.print(F(" "));     
-        }
+        findMaximumAndWidthOnInterval(lastRawValues, rawValuesArraySize);
     }  
 }
 
