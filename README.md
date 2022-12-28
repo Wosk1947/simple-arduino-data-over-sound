@@ -43,7 +43,7 @@ First you need to change the *amplitudeIntervals* array that contains values of 
 int amplitudeIntervals[] = {20,30,40,50,65,75,85,100};
 ```
 This can be done by sending sequence 0-6 several times, printing the resulting amplitudes and picking up appropriate dividing amplitudes. Note that printing to Serial
-is computational heavy procedure for Arduino, and if you try to output too much info, it will decrease the speed of Arduino which will lead to fewere points of each spike registered and as a result to errors in recognition of spikes.
+is computational heavy procedure for Arduino, and if you try to output too much info, it will decrease the speed of Arduino which will lead to fewer points of each spike registered and as a result to errors in recognition of spikes.
 Second, you need to change *wavelengthIntervals* array that contains ranges of width of spike (amount of points containing the spike):
 ```
 int wavelengthIntervals[] = {8,12,20};
