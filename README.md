@@ -3,7 +3,7 @@
   This project shows how one can perform data transfer from any device capable of producing sound and having a 3.5 mm mini jack for headphones to arduino. 
 The data is being transferred via modulating the signal produced by device's audio system. The project is purely educational, its goal is to provide reader 
 with some basics of data over sound transferring that is commonly used since 60s in modems. The project can hardly be applied in practice, 
-because maximum speed of data transferring achieved is ~60 bits per second.
+because maximum speed of data transferring achieved is ~80 bits per second.
 
 ## Setup
 
@@ -20,22 +20,31 @@ different media(sounds, pictures, etc.) and is multiplatform - it can be run on 
 
 The basics of data transferring via analogue signal (sound, radio, light, anything...) is modulating the shape of the wave so different shapes of different regions of
 the wave correspond to some data. There are many ways of wave modulation - [amplitude modulation](https://en.wikipedia.org/wiki/Amplitude_modulation), 
-[frequency modulation](https://en.wikipedia.org/wiki/Frequency_modulation), [phase modulation](https://en.wikipedia.org/wiki/Phase_modulation) and more. In this project
-the simplest one, amplitude modulation, was made.
+[frequency modulation](https://en.wikipedia.org/wiki/Frequency_modulation), [phase modulation](https://en.wikipedia.org/wiki/Phase_modulation) and more. In this project currently amplitude and frequency modulation are implemented, but not in a way of modulating the amplitude and frequency of sequences of waves but rather modulating each spike individual amplitude and wavelength.  
 
-Java code produces spikes of sound waves at 100 Hz, and modulates the amplitude (volume) of each spike so the amplitude corresponds to an integer number.
-Arduino code recieves the analog signals and demodulates it, retrieving the numbers. 
+Java code produces spikes of sound waves at 100 Hz and 50 Hz, modulates the amplitude (volume) of each spike so the amplitude corresponds to an integer number. So both 
+sound frequency and amplitude being used for encoding numbers. Arduino code recieves the analog signals and demodulates it, retrieving the numbers.
+
+Sample of signal being read by Arduino:
+
+<img src="https://user-images.githubusercontent.com/66104180/209829329-9a9f7e51-fdc0-4a9d-9d75-36d80e1c1a52.png" width="500" height="300" />
 
 It was found that the maximum amount of distinct values that can be transferred via
-one spike in this setup is 7 (integer numbers 0-6). Further descritization is hard to perform because spike amplitude errors start to overlap which makes it impossible to
+one spike in this setup is 7. Further descritization is hard to perform because spike amplitude errors start to overlap which makes it impossible to
 distinct adjacent values. A spike is being produced 20 times a second. More frequent spikes result in increasing the error in spikes's amplitude. Likely because of inertia 
 in anlog components of audio system. Also increasing the frequency of sound leads to increasing the error of spike's amplitude. Because the wavelength becomes smaller,
 Arduino reads fewer values of each spike, which leads to bigger error. 
 
 Inside Java code you will find samples of sound spikes of different frequency if you want to experiment and come up with better algorithms, or you can just generate your own through additional software (I used Audacity) or at runtime using some framework.
 
-Because different devices have different audiosystems, the resulting physical amplitude of a wave for each number will be specific for your device. In order to successfully demodulate this signal you will have to adjust Arduino script, mainly the *intervals* array that contains values of amplitudes dividing ranges of amplitudes for each numeric value:
+Because different devices have different audio systems, the resulting physical amplitude of a wave for each number will be specific for your device. In order to successfully demodulate this signal you will have to adjust Arduino script. 
+First you need to change the *amplitudeIntervals* array that contains values of amplitudes dividing ranges of amplitudes for each numeric value:
 ```
-float intervals[] = {20,30,40,50,65,75,85,100};
+int amplitudeIntervals[] = {20,30,40,50,65,75,85,100};
 ```
-This can be done by sending sequence 0-6 several times, printing the resulting amplitudes and picking up appropriate dividing amplitudes. 
+This can be done by sending sequence 0-6 several times, printing the resulting amplitudes and picking up appropriate dividing amplitudes. Note that printing to Serial
+is computational heavy procedure for Arduino, and if you try to output too much info, it will affect the speed of Arduino which will lead to errors in recognition of spikes.
+Second, you need to change *wavelengthIntervals* array that contains ranges of width of spike (amount of points containing the spike):
+```
+int wavelengthIntervals[] = {8,12,20};
+```
