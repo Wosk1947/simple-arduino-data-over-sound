@@ -48,4 +48,4 @@ Second, you need to change *wavelengthIntervals* array that contains ranges of w
 ```
 int wavelengthIntervals[] = {8,12,20};
 ```
-Finally you will need to adjust 2 values. *minVolume* in Java code and *rawValueThreshold* in Arduino script. *minVolume* corresponds to minimum volume of signal produced. This value is needed because on low volumes signals are noised and distorted. *rawValueThreshold* is needed to cut the noise that is being produced during signal travelling through cable and through Arduino. 
+Finally you will need to adjust 2 values. *minVolume* in Java code and *rawValueThreshold* in Arduino script. *minVolume* corresponds to minimum volume of signal produced. This value is needed because on low volumes signals are noised and distorted. *rawValueThreshold* is needed to cut the noise that is being produced during signal travelling through cable and through Arduino. Lower values of these two variables make the range of amplitudes wider and provide more points for each spike but at the same time increase the errors. 
